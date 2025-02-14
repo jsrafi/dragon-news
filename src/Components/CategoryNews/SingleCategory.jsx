@@ -9,11 +9,15 @@ const SingleCategory = ({ news }) => {
     total_view, 
     image_url, 
     details, 
-    others_info 
+
   } = news;
+
+
+  
   
 
   return (
+    
     <div className="bg-white shadow-xl border border-gray-200 rounded-lg overflow-hidden  p-4">
       {/* Header Section */}
       <div className="flex items-center justify-between pb-2">
@@ -54,12 +58,7 @@ const SingleCategory = ({ news }) => {
         </div>
       </div>
 
-      {/* Trending Badge */}
-      {others_info.is_trending && (
-        <span className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded">
-          Trending
-        </span>
-      )}
+      
     </div>
   );
 };
