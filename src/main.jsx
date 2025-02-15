@@ -12,6 +12,8 @@ import AuthLayout from './Layouts/AuthLayout';
 import Login from './Components/AuthComponents/Login';
 import Register from './Components/AuthComponents/Register';
 import AuthProvider from './provider/AuthProvider';
+import NewsDetails from './Layouts/NewsDetails';
+import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
 
 const router = createBrowserRouter([
   {
@@ -42,6 +44,13 @@ const router = createBrowserRouter([
         element: <Register></Register>
       }
     ]
+  },
+  {
+    path: "/news/:id",
+    element: (<PrivateRoute>
+      <NewsDetails></NewsDetails>
+    </PrivateRoute>),
+    loader: ({ params }) => fetch(`https://openapi.programming-hero.com/api/news/${params.id}`)
   }
 ]);
 

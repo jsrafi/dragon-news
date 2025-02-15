@@ -1,18 +1,35 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../provider/AuthProvider";
 
 
 const Register = () => {
 
-    const {createNewUser,setUser} = useContext(AuthContext);
-
+    const {createNewUser,setUser, updateProfileData} = useContext(AuthContext);
+    const [error,setError] = useState({});
+    const [error2,setError2] = useState({});
+    const navigate = useNavigate();
+    
     const handleSubmit =(e)=>
     {
         e.preventDefault();
 
         const name = e.target.name.value;
+        if(name.length<4)
+        {
+            setError({ ...error, name: "Name should be more than 3 characters" })
+            return;
+        }
         const photo = e.target.photo.value;
+        if(!photo.includes("http"))
+        {
+            setError({...error, photo: "Not a valid URL. Should have http"})
+            return;
+        }
+        else
+        {
+            setError({})
+        }
         const email = e.target.email.value;
         const password = e.target.password.value;
         console.log({name,photo,email,password})
@@ -21,10 +38,18 @@ const Register = () => {
         .then((result) => {
             console.log(result.user)
             setUser(result.user)
+            updateProfileData({displayName:name, photoURL:photo})
+            .then(()=>
+            {
+                navigate("/");
+            })
+            .catch(err=> console.log(err))
+            setError2({})
         })
-        .catch((error)=>
+        .catch((err)=>
         {
-            console.log("ERROR", error)
+            console.log("ERROR", err)
+            setError2({...error2, user: err.message})
         })
     }
 
@@ -40,11 +65,25 @@ const Register = () => {
                         </label>
                         <input name="name" type="text" placeholder="Name" className="input input-bordered w-full" required />
                     </div>
+                    <div>
+                        {
+                            error?.name && <label className="label text-red-600">
+                            {error.name}
+                        </label>
+                        }
+                    </div>
                     <div className="form-control">
                         <label className="label">
                             <span className="label-text  text-black">IMG-URL</span>
                         </label>
                         <input name="photo" type="text" placeholder="IMG-URL" className="input input-bordered w-full" required />
+                    </div>
+                    <div>
+                        {
+                            error?.photo ? <label className="label text-red-600">
+                            {error.photo}
+                        </label> : ""
+                        }
                     </div>
                     <div className="form-control">
                         <label className="label">
@@ -59,6 +98,13 @@ const Register = () => {
                         <input name="password" type="password" placeholder="password" className="input input-bordered w-full" required />
                         
                     </div>
+                    {
+                        error2?.user &&  <label className="label text-red-600">
+                            {error2.user} 
+                        </label> 
+                        
+                    
+                    }
                     <div className="form-control mt-6">
                         <button className="btn btn-neutral w-full rounded-none">Register</button>
                     </div>

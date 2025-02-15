@@ -1,5 +1,6 @@
 import { FaStar, FaRegEye, FaShareAlt } from "react-icons/fa";
 import PropTypes from 'prop-types';
+import { Link } from "react-router-dom";
 
 const SingleCategory = ({ news }) => {
   const { 
@@ -9,6 +10,7 @@ const SingleCategory = ({ news }) => {
     total_view, 
     image_url, 
     details, 
+    _id
 
   } = news;
 
@@ -39,7 +41,7 @@ const SingleCategory = ({ news }) => {
 
       {/* News Details */}
       <p className="text-sm text-gray-600">{details.slice(0, 150)}...</p>
-      <p className="text-red-500 text-sm font-semibold cursor-pointer mt-2">Read More</p>
+      <Link to={`/news/${_id}`} className="text-red-500 text-sm font-semibold cursor-pointer mt-2">Read More</Link>
 
       {/* Footer Section */}
       <div className="flex justify-between items-center mt-4">
